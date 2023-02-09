@@ -1,0 +1,502 @@
+const unknown860d248a = '018002', 0
+const unknownf3fe3bc3 = '018001', 0
+
+def storage:
+  stor0 is mapping of uint8 at storage 0
+  ownerOf is mapping of addr at storage 1
+  approved is mapping of addr at storage 2
+  balanceOf is mapping of uint256 at storage 3
+  stor4 is mapping of uint8 at storage 4
+  stor5 is array of struct at storage 5
+  stor6 is array of struct at storage 6
+  stor7 is mapping of struct at storage 7
+  owner is addr at storage 8
+
+def supportsInterface(bytes4 _interfaceId) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 32
+  require _interfaceId == Mask(32, 224, _interfaceId)
+  return bool(stor0[Mask(32, 224, _interfaceId)])
+
+def getApproved(uint256 _tokenId) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 32
+  require _tokenId == _tokenId
+  if not ownerOf[_tokenId]:
+      revert with 0, '003002', 0
+  return approved[_tokenId]
+
+def ownerOf(uint256 _tokenId) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 32
+  require _tokenId == _tokenId
+  if not ownerOf[_tokenId]:
+      revert with 0, '003002', 0
+  return ownerOf[_tokenId]
+
+def balanceOf(address _owner) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 32
+  require _owner == _owner
+  if not _owner:
+      revert with 0, '003001', 0
+  return balanceOf[addr(_owner)]
+
+def owner() payable: 
+  return owner
+
+def isApprovedForAll(address _owner, address _operator) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 64
+  require _owner == _owner
+  require _operator == _operator
+  return bool(stor4[addr(_owner)][addr(_operator)])
+
+#
+#  Regular functions
+#
+
+def _fallback() payable: # default function
+  revert
+
+def transferOwnership(address _newOwner) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 32
+  require _newOwner == _newOwner
+  if owner != caller:
+      revert with 0, '018001', 0
+  if not _newOwner:
+      revert with 0, '018002', 0
+  log OwnershipTransferred(
+        address previousOwner=owner,
+        address newOwner=_newOwner)
+  owner = _newOwner
+
+def setApprovalForAll(address _to, bool _approved) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 64
+  require _to == _to
+  require _approved == _approved
+  stor4[caller][addr(_to)] = uint8(_approved)
+  log ApprovalForAll(
+        address owner=_approved,
+        address operator=caller,
+        bool approved=_to)
+
+def approve(address _spender, uint256 _value) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 64
+  require _spender == _spender
+  require _value == _value
+  if ownerOf[_value] != caller:
+      if not stor4[stor1[_value]][caller]:
+          revert with 0, '003003', 0
+  if not ownerOf[_value]:
+      revert with 0, '003002', 0
+  if _spender == ownerOf[_value]:
+      revert with 0, '003008', 0
+  approved[_value] = _spender
+  log Approval(
+        address tokenOwner=ownerOf[_value],
+        address spender=_spender,
+        uint256 tokens=_value)
+
+def transferFrom(address _from, address _to, uint256 _value) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 96
+  require _from == _from
+  require _to == _to
+  require _value == _value
+  if ownerOf[_value] != caller:
+      if approved[_value] != caller:
+          if not stor4[stor1[_value]][caller]:
+              revert with 0, '003004', 0
+  if not ownerOf[_value]:
+      revert with 0, '003002', 0
+  if ownerOf[_value] != _from:
+      revert with 0, '003007', 0
+  if not _to:
+      revert with 0, '003001', 0
+  approved[_value] = 0
+  if ownerOf[_value] != ownerOf[_value]:
+      revert with 0, '003007', 0
+  if balanceOf[stor1[_value]] < 1:
+      revert with 'NH{q', 17
+  balanceOf[stor1[_value]]--
+  ownerOf[_value] = 0
+  if ownerOf[_value]:
+      revert with 0, '003006', 0
+  ownerOf[_value] = _to
+  if balanceOf[addr(_to)] > -2:
+      revert with 'NH{q', 17
+  balanceOf[addr(_to)]++
+  log Transfer(
+        address from=ownerOf[_value],
+        address to=_to,
+        uint256 tokens=_value)
+
+def safeTransferFrom(address _from, address _to, uint256 _tokenId) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 96
+  require _from == _from
+  require _to == _to
+  require _tokenId == _tokenId
+  if ownerOf[_tokenId] != caller:
+      if approved[_tokenId] != caller:
+          if not stor4[stor1[_tokenId]][caller]:
+              revert with 0, '003004', 0
+  if not ownerOf[_tokenId]:
+      revert with 0, '003002', 0
+  if ownerOf[_tokenId] != _from:
+      revert with 0, '003007', 0
+  if not _to:
+      revert with 0, '003001', 0
+  approved[_tokenId] = 0
+  if ownerOf[_tokenId] != ownerOf[_tokenId]:
+      revert with 0, '003007', 0
+  if balanceOf[stor1[_tokenId]] < 1:
+      revert with 'NH{q', 17
+  balanceOf[stor1[_tokenId]]--
+  ownerOf[_tokenId] = 0
+  if ownerOf[_tokenId]:
+      revert with 0, '003006', 0
+  ownerOf[_tokenId] = _to
+  if balanceOf[addr(_to)] > -2:
+      revert with 'NH{q', 17
+  balanceOf[addr(_to)]++
+  log Transfer(
+        address from=ownerOf[_tokenId],
+        address to=_to,
+        uint256 tokens=_tokenId)
+  if ext_code.hash(_to):
+      if ext_code.hash(_to) != 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470:
+          require ext_code.size(_to)
+          call _to.onERC721Received(address operator, address from, uint256 childTokenId, bytes data) with:
+               gas gas_remaining wei
+              args caller, addr(_from), _tokenId, 128, 0
+          if not ext_call.success:
+              revert with ext_call.return_data[0 len return_data.size]
+          require return_data.size >=ΓÇ▓ 32
+          require ext_call.return_data == Mask(32, 224, ext_call.return_data[0])
+          if Mask(32, 224, ext_call.return_data[0]) != 0x150b7a0200000000000000000000000000000000000000000000000000000000:
+              revert with 0, '003005', 0
+
+def safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes _data) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 128
+  require _from == _from
+  require _to == _to
+  require _tokenId == _tokenId
+  require _data <= 18446744073709551615
+  require _data + 35 <ΓÇ▓ calldata.size
+  require _data.length <= 18446744073709551615
+  require _data + _data.length + 36 <= calldata.size
+  if ownerOf[_tokenId] != caller:
+      if approved[_tokenId] != caller:
+          if not stor4[stor1[_tokenId]][caller]:
+              revert with 0, '003004', 0
+  if not ownerOf[_tokenId]:
+      revert with 0, '003002', 0
+  if ownerOf[_tokenId] != _from:
+      revert with 0, '003007', 0
+  if not _to:
+      revert with 0, '003001', 0
+  approved[_tokenId] = 0
+  if ownerOf[_tokenId] != ownerOf[_tokenId]:
+      revert with 0, '003007', 0
+  if balanceOf[stor1[_tokenId]] < 1:
+      revert with 'NH{q', 17
+  balanceOf[stor1[_tokenId]]--
+  ownerOf[_tokenId] = 0
+  if ownerOf[_tokenId]:
+      revert with 0, '003006', 0
+  ownerOf[_tokenId] = _to
+  if balanceOf[addr(_to)] > -2:
+      revert with 'NH{q', 17
+  balanceOf[addr(_to)]++
+  log Transfer(
+        address from=ownerOf[_tokenId],
+        address to=_to,
+        uint256 tokens=_tokenId)
+  if ext_code.hash(_to):
+      if ext_code.hash(_to) != 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470:
+          require ext_code.size(_to)
+          call _to.onERC721Received(address operator, address from, uint256 childTokenId, bytes data) with:
+               gas gas_remaining wei
+              args caller, addr(_from), _tokenId, Array(len=_data.length, data=_data[all])
+          if not ext_call.success:
+              revert with ext_call.return_data[0 len return_data.size]
+          require return_data.size >=ΓÇ▓ 32
+          require ext_call.return_data == Mask(32, 224, ext_call.return_data[0])
+          if Mask(32, 224, ext_call.return_data[0]) != 0x150b7a0200000000000000000000000000000000000000000000000000000000:
+              revert with 0, '003005', 0
+
+def mint(address _to, uint256 _amount, string _batchCode) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 96
+  require _to == _to
+  require _amount == _amount
+  require _batchCode <= 18446744073709551615
+  require _batchCode + 35 <ΓÇ▓ calldata.size
+  require _batchCode.length <= 18446744073709551615
+  require _batchCode + _batchCode.length + 36 <= calldata.size
+  if owner != caller:
+      revert with 0, '018001', 0
+  if not _to:
+      revert with 0, '003001', 0
+  if ownerOf[_amount]:
+      revert with 0, '003006', 0
+  if ownerOf[_amount]:
+      revert with 0, '003006', 0
+  ownerOf[_amount] = _to
+  if balanceOf[addr(_to)] > -2:
+      revert with 'NH{q', 17
+  balanceOf[addr(_to)]++
+  log Transfer(
+        address from=0,
+        address to=_to,
+        uint256 tokens=_amount)
+  if not ownerOf[_amount]:
+      revert with 0, '003002', 0
+  if stor7[_amount].field_0:
+      if stor7[_amount].field_0 == stor7[_amount].field_1 < 32:
+          revert with 'NH{q', 34
+      if _batchCode.length:
+          stor7[_amount][].field_0 = Array(len=_batchCode.length, data=_batchCode[all])
+      else:
+          stor7[_amount].field_0 = 0
+          idx = 0
+          while stor7[_amount].field_1 + 31 / 32 > idx:
+              stor7[_amount][idx].field_0 = 0
+              idx = idx + 1
+              continue 
+  else:
+      if stor7[_amount].field_0 == stor7[_amount].field_1 < 32:
+          revert with 'NH{q', 34
+      if _batchCode.length:
+          stor7[_amount][].field_0 = Array(len=_batchCode.length, data=_batchCode[all])
+      else:
+          stor7[_amount].field_0 = 0
+          idx = 0
+          while stor7[_amount].field_1 + 31 / 32 > idx:
+              stor7[_amount][idx].field_0 = 0
+              idx = idx + 1
+              continue 
+
+def name() payable: 
+  if bool(stor5.length):
+      if bool(stor5.length) == stor5.length.field_1 < 32:
+          revert with 'NH{q', 34
+      if bool(stor5.length):
+          if bool(stor5.length) == stor5.length.field_1 < 32:
+              revert with 'NH{q', 34
+          if stor5.length.field_1:
+              if 31 < stor5.length.field_1:
+                  mem[128] = uint256(stor5.field_0)
+                  idx = 128
+                  s = 0
+                  while stor5.length.field_1 + 96 > idx:
+                      mem[idx + 32] = stor5[s].field_256
+                      idx = idx + 32
+                      s = s + 1
+                      continue 
+                  return Array(len=2 * Mask(256, -1, stor5.length.field_1), data=mem[128 len ceil32(stor5.length.field_1)])
+              mem[128] = 256 * stor5.length.field_8
+      else:
+          if bool(stor5.length) == stor5.length.field_1 < 32:
+              revert with 'NH{q', 34
+          if stor5.length.field_1:
+              if 31 < stor5.length.field_1:
+                  mem[128] = uint256(stor5.field_0)
+                  idx = 128
+                  s = 0
+                  while stor5.length.field_1 + 96 > idx:
+                      mem[idx + 32] = stor5[s].field_256
+                      idx = idx + 32
+                      s = s + 1
+                      continue 
+                  return Array(len=2 * Mask(256, -1, stor5.length.field_1), data=mem[128 len ceil32(stor5.length.field_1)])
+              mem[128] = 256 * stor5.length.field_8
+      mem[ceil32(stor5.length.field_1) + 192 len ceil32(stor5.length.field_1)] = mem[128 len ceil32(stor5.length.field_1)]
+      if ceil32(stor5.length.field_1) > stor5.length.field_1:
+          mem[ceil32(stor5.length.field_1) + stor5.length.field_1 + 192] = 0
+      return Array(len=2 * Mask(256, -1, stor5.length.field_1), data=mem[128 len ceil32(stor5.length.field_1)], mem[(2 * ceil32(stor5.length.field_1)) + 192 len 2 * ceil32(stor5.length.field_1)]), 
+  if bool(stor5.length) == stor5.length.field_1 < 32:
+      revert with 'NH{q', 34
+  if bool(stor5.length):
+      if bool(stor5.length) == stor5.length.field_1 < 32:
+          revert with 'NH{q', 34
+      if stor5.length.field_1:
+          if 31 < stor5.length.field_1:
+              mem[128] = uint256(stor5.field_0)
+              idx = 128
+              s = 0
+              while stor5.length.field_1 + 96 > idx:
+                  mem[idx + 32] = stor5[s].field_256
+                  idx = idx + 32
+                  s = s + 1
+                  continue 
+              return Array(len=stor5.length % 128, data=mem[128 len ceil32(stor5.length.field_1)])
+          mem[128] = 256 * stor5.length.field_8
+  else:
+      if bool(stor5.length) == stor5.length.field_1 < 32:
+          revert with 'NH{q', 34
+      if stor5.length.field_1:
+          if 31 < stor5.length.field_1:
+              mem[128] = uint256(stor5.field_0)
+              idx = 128
+              s = 0
+              while stor5.length.field_1 + 96 > idx:
+                  mem[idx + 32] = stor5[s].field_256
+                  idx = idx + 32
+                  s = s + 1
+                  continue 
+              return Array(len=stor5.length % 128, data=mem[128 len ceil32(stor5.length.field_1)])
+          mem[128] = 256 * stor5.length.field_8
+  mem[ceil32(stor5.length.field_1) + 192 len ceil32(stor5.length.field_1)] = mem[128 len ceil32(stor5.length.field_1)]
+  if ceil32(stor5.length.field_1) > stor5.length.field_1:
+      mem[ceil32(stor5.length.field_1) + stor5.length.field_1 + 192] = 0
+  return Array(len=stor5.length % 128, data=mem[128 len ceil32(stor5.length.field_1)], mem[(2 * ceil32(stor5.length.field_1)) + 192 len 2 * ceil32(stor5.length.field_1)]), 
+
+def symbol() payable: 
+  if bool(stor6.length):
+      if bool(stor6.length) == stor6.length.field_1 < 32:
+          revert with 'NH{q', 34
+      if bool(stor6.length):
+          if bool(stor6.length) == stor6.length.field_1 < 32:
+              revert with 'NH{q', 34
+          if stor6.length.field_1:
+              if 31 < stor6.length.field_1:
+                  mem[128] = uint256(stor6.field_0)
+                  idx = 128
+                  s = 0
+                  while stor6.length.field_1 + 96 > idx:
+                      mem[idx + 32] = stor6[s].field_256
+                      idx = idx + 32
+                      s = s + 1
+                      continue 
+                  return Array(len=2 * Mask(256, -1, stor6.length.field_1), data=mem[128 len ceil32(stor6.length.field_1)])
+              mem[128] = 256 * stor6.length.field_8
+      else:
+          if bool(stor6.length) == stor6.length.field_1 < 32:
+              revert with 'NH{q', 34
+          if stor6.length.field_1:
+              if 31 < stor6.length.field_1:
+                  mem[128] = uint256(stor6.field_0)
+                  idx = 128
+                  s = 0
+                  while stor6.length.field_1 + 96 > idx:
+                      mem[idx + 32] = stor6[s].field_256
+                      idx = idx + 32
+                      s = s + 1
+                      continue 
+                  return Array(len=2 * Mask(256, -1, stor6.length.field_1), data=mem[128 len ceil32(stor6.length.field_1)])
+              mem[128] = 256 * stor6.length.field_8
+      mem[ceil32(stor6.length.field_1) + 192 len ceil32(stor6.length.field_1)] = mem[128 len ceil32(stor6.length.field_1)]
+      if ceil32(stor6.length.field_1) > stor6.length.field_1:
+          mem[ceil32(stor6.length.field_1) + stor6.length.field_1 + 192] = 0
+      return Array(len=2 * Mask(256, -1, stor6.length.field_1), data=mem[128 len ceil32(stor6.length.field_1)], mem[(2 * ceil32(stor6.length.field_1)) + 192 len 2 * ceil32(stor6.length.field_1)]), 
+  if bool(stor6.length) == stor6.length.field_1 < 32:
+      revert with 'NH{q', 34
+  if bool(stor6.length):
+      if bool(stor6.length) == stor6.length.field_1 < 32:
+          revert with 'NH{q', 34
+      if stor6.length.field_1:
+          if 31 < stor6.length.field_1:
+              mem[128] = uint256(stor6.field_0)
+              idx = 128
+              s = 0
+              while stor6.length.field_1 + 96 > idx:
+                  mem[idx + 32] = stor6[s].field_256
+                  idx = idx + 32
+                  s = s + 1
+                  continue 
+              return Array(len=stor6.length % 128, data=mem[128 len ceil32(stor6.length.field_1)])
+          mem[128] = 256 * stor6.length.field_8
+  else:
+      if bool(stor6.length) == stor6.length.field_1 < 32:
+          revert with 'NH{q', 34
+      if stor6.length.field_1:
+          if 31 < stor6.length.field_1:
+              mem[128] = uint256(stor6.field_0)
+              idx = 128
+              s = 0
+              while stor6.length.field_1 + 96 > idx:
+                  mem[idx + 32] = stor6[s].field_256
+                  idx = idx + 32
+                  s = s + 1
+                  continue 
+              return Array(len=stor6.length % 128, data=mem[128 len ceil32(stor6.length.field_1)])
+          mem[128] = 256 * stor6.length.field_8
+  mem[ceil32(stor6.length.field_1) + 192 len ceil32(stor6.length.field_1)] = mem[128 len ceil32(stor6.length.field_1)]
+  if ceil32(stor6.length.field_1) > stor6.length.field_1:
+      mem[ceil32(stor6.length.field_1) + stor6.length.field_1 + 192] = 0
+  return Array(len=stor6.length % 128, data=mem[128 len ceil32(stor6.length.field_1)], mem[(2 * ceil32(stor6.length.field_1)) + 192 len 2 * ceil32(stor6.length.field_1)]), 
+
+def tokenURI(uint256 _tokenId) payable: 
+  require calldata.size - 4 >=ΓÇ▓ 32
+  require _tokenId == _tokenId
+  if not ownerOf[_tokenId]:
+      revert with 0, '003002', 0
+  if stor7[_tokenId].field_0:
+      if stor7[_tokenId].field_0 == stor7[_tokenId].field_1 < 32:
+          revert with 'NH{q', 34
+      if stor7[_tokenId].field_0:
+          if stor7[_tokenId].field_0 == stor7[_tokenId].field_1 < 32:
+              revert with 'NH{q', 34
+          if stor7[_tokenId].field_1:
+              if 31 < stor7[_tokenId].field_1:
+                  mem[192] = stor7[_tokenId].field_0
+                  idx = 192
+                  s = 0
+                  while stor7[_tokenId].field_1 + 160 > idx:
+                      mem[idx + 32] = stor7[_tokenId][s].field_256
+                      idx = idx + 32
+                      s = s + 1
+                      continue 
+                  return Array(len=2 * Mask(256, -1, stor7[_tokenId].field_1), data=mem[192 len ceil32(stor7[_tokenId].field_1)])
+              mem[192] = 256 * stor7[_tokenId].field_8
+      else:
+          if stor7[_tokenId].field_0 == stor7[_tokenId].field_1 < 32:
+              revert with 'NH{q', 34
+          if stor7[_tokenId].field_1:
+              if 31 < stor7[_tokenId].field_1:
+                  mem[192] = stor7[_tokenId].field_0
+                  idx = 192
+                  s = 0
+                  while stor7[_tokenId].field_1 + 160 > idx:
+                      mem[idx + 32] = stor7[_tokenId][s].field_256
+                      idx = idx + 32
+                      s = s + 1
+                      continue 
+                  return Array(len=2 * Mask(256, -1, stor7[_tokenId].field_1), data=mem[192 len ceil32(stor7[_tokenId].field_1)])
+              mem[192] = 256 * stor7[_tokenId].field_8
+      mem[ceil32(stor7[_tokenId].field_1) + 256 len ceil32(stor7[_tokenId].field_1)] = mem[192 len ceil32(stor7[_tokenId].field_1)]
+      if ceil32(stor7[_tokenId].field_1) > stor7[_tokenId].field_1:
+          mem[ceil32(stor7[_tokenId].field_1) + stor7[_tokenId].field_1 + 256] = 0
+      return Array(len=2 * Mask(256, -1, stor7[_tokenId].field_1), data=mem[192 len ceil32(stor7[_tokenId].field_1)], mem[(2 * ceil32(stor7[_tokenId].field_1)) + 256 len 2 * ceil32(stor7[_tokenId].field_1)]), 
+  if stor7[_tokenId].field_0 == stor7[_tokenId].field_1 < 32:
+      revert with 'NH{q', 34
+  if stor7[_tokenId].field_0:
+      if stor7[_tokenId].field_0 == stor7[_tokenId].field_1 < 32:
+          revert with 'NH{q', 34
+      if stor7[_tokenId].field_1:
+          if 31 < stor7[_tokenId].field_1:
+              mem[192] = stor7[_tokenId].field_0
+              idx = 192
+              s = 0
+              while stor7[_tokenId].field_1 + 160 > idx:
+                  mem[idx + 32] = stor7[_tokenId][s].field_256
+                  idx = idx + 32
+                  s = s + 1
+                  continue 
+              return Array(len=stor7[_tokenId].field_0, data=mem[192 len ceil32(stor7[_tokenId].field_1)])
+          mem[192] = 256 * stor7[_tokenId].field_8
+  else:
+      if stor7[_tokenId].field_0 == stor7[_tokenId].field_1 < 32:
+          revert with 'NH{q', 34
+      if stor7[_tokenId].field_1:
+          if 31 < stor7[_tokenId].field_1:
+              mem[192] = stor7[_tokenId].field_0
+              idx = 192
+              s = 0
+              while stor7[_tokenId].field_1 + 160 > idx:
+                  mem[idx + 32] = stor7[_tokenId][s].field_256
+                  idx = idx + 32
+                  s = s + 1
+                  continue 
+              return Array(len=stor7[_tokenId].field_0, data=mem[192 len ceil32(stor7[_tokenId].field_1)])
+          mem[192] = 256 * stor7[_tokenId].field_8
+  mem[ceil32(stor7[_tokenId].field_1) + 256 len ceil32(stor7[_tokenId].field_1)] = mem[192 len ceil32(stor7[_tokenId].field_1)]
+  if ceil32(stor7[_tokenId].field_1) > stor7[_tokenId].field_1:
+      mem[ceil32(stor7[_tokenId].field_1) + stor7[_tokenId].field_1 + 256] = 0
+  return Array(len=stor7[_tokenId].field_0, data=mem[192 len ceil32(stor7[_tokenId].field_1)], mem[(2 * ceil32(stor7[_tokenId].field_1)) + 256 len 2 * ceil32(stor7[_tokenId].field_1)]), 
+
