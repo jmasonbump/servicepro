@@ -1,0 +1,28 @@
+{
+  "name": "servicepro",
+  "version": "1.0.0",
+  "description": "Legal service of process for on-chain actors",
+  "main": "index.js",
+  "scripts": {
+    "test": "you've been served"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmasonbump/servicepro.git"
+  },
+  "keywords": [
+    "legalengineering",
+    "service",
+    "web3law",
+    "blockwest"
+  ],
+  "author": "J. Mason Bump",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jmasonbump/servicepro/issues"
+  },
+  "homepage": "https://github.com/jmasonbump/servicepro#readme",
+  "dependencies": {
+    "alchemy-sdk": "^2.4.1"
+  }
+}
